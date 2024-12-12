@@ -14,6 +14,7 @@ public class MainActivity extends AppCompatActivity {
     private SavonManager savonManager;
     private ButtonSavonManager buttonSavonManager;
     private ScreenSlidePagerAdapter adapter;
+    //githubのテストです！！byこむぎ
 
     //テストです
 
