@@ -11,7 +11,7 @@ import java.util.List;
 public class SavonAnimationManager {
     // アニメーションの定数
     private static final float START_Y = 500f;
-    private static final float END_Y = -3000f;
+    private static final float END_Y = -2200f;
     private static final float SWING_RANGE = 50f;
     private static final long RISE_DURATION = 9000;
     private static final long SWING_DURATION = 1000;
