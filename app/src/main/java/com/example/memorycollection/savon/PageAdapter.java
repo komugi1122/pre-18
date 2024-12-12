@@ -1,5 +1,6 @@
 package com.example.memorycollection.savon;
 
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,51 +13,42 @@ import com.example.memorycollection.R;
 
 import java.util.List;
 
-public class PageAdapter extends RecyclerView.Adapter<PageAdapter.ViewHolder> {
+public class PageAdapter extends RecyclerView.Adapter<PageAdapter.PageViewHolder> {
+    private final List<Uri> uriList;
 
-    public interface OnImageClickListener {
-        void onImageClick(int imageResId);
-    }
-
-    private final List<PageData> pageDataList;
-    private final OnImageClickListener imageClickListener;
-
-    public PageAdapter(List<PageData> pageDataList, OnImageClickListener listener) {
-        this.pageDataList = pageDataList;
-        this.imageClickListener = listener;
+    public PageAdapter(List<Uri> uriList) {
+        this.uriList = uriList;
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public PageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_page, parent, false);
-        return new ViewHolder(view);
+        return new PageViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        PageData data = pageDataList.get(position);
-        holder.backgroundImage.setImageResource(data.getBackgroundImageResId());
-        holder.photo.setImageResource(data.getPhotoResId()); // 1枚のみ表示
-
-        // 写真をタップした場合
-        holder.photo.setOnClickListener(v -> imageClickListener.onImageClick(data.getPhotoResId()));
+    public void onBindViewHolder(@NonNull PageViewHolder holder, int position) {
+        Uri uri = uriList.get(position);
+        holder.photoImageView.setImageURI(uri);
+        // 背景画像の設定は必要に応じてここに記載
     }
 
     @Override
     public int getItemCount() {
-        return pageDataList.size();
+        return uriList.size();
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView backgroundImage;
-        ImageView photo;
+    public static class PageViewHolder extends RecyclerView.ViewHolder {
+        ImageView photoImageView;
+        ImageView backgroundImageView; // 必要なら背景画像もサポート
 
-        ViewHolder(@NonNull View itemView) {
+        public PageViewHolder(@NonNull View itemView) {
             super(itemView);
-            backgroundImage = itemView.findViewById(R.id.backgroundImage);
-            photo = itemView.findViewById(R.id.photo);
+            // item_page.xml の ID と一致させること！
+            photoImageView = itemView.findViewById(R.id.photo);
+            backgroundImageView = itemView.findViewById(R.id.backgroundImage); // 必要なら取得
         }
     }
 }

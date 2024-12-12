@@ -9,7 +9,9 @@
         android:id="@+id/backgroundImage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop" />
+        android:src="@drawable/background_museum"
+        android:scaleType="centerCrop"
+        android:contentDescription="" />
 
     <!-- 写真 -->
     <ImageView
@@ -17,7 +19,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:scaleType="fitCenter"
-
+        android:contentDescription=""
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_max="355dp"
