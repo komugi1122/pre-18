@@ -15,6 +15,8 @@ public class MainActivity extends AppCompatActivity {
     private ButtonSavonManager buttonSavonManager;
     private ScreenSlidePagerAdapter adapter;
 
+    //テストです
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
