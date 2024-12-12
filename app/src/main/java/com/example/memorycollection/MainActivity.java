@@ -9,14 +9,11 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.example.memorycollection.savon.ButtonSavonManager;
 import com.example.memorycollection.savon.SavonManager;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
 
     private SavonManager savonManager;
     private ButtonSavonManager buttonSavonManager;
     private ScreenSlidePagerAdapter adapter;
-    //githubのテストです！！byこむぎ
-
-    //テストです
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
 
     }
 
