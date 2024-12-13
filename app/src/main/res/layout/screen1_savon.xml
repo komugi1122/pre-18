@@ -1,20 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/startLayout"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/main_background1">
 
-    <!-- 実行ボタン -->
+    <FrameLayout
+        android:id="@+id/startLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </FrameLayout>
+
     <ImageButton
         android:id="@+id/executeButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|center"
-        android:src="@drawable/start_savon"
+        android:layout_gravity="center"
         android:background="@null"
-        android:contentDescription="@string/savon"
-        android:elevation="10dp"/>
+        android:src="@drawable/start_savon"
+        android:contentDescription="@string/savon"/>
+
+    <ImageButton
+        android:id="@+id/resetButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|bottom"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@null"
+        android:src="@drawable/setting_icon"
+        android:contentDescription="@string/savon"/>
+
+    <ImageView
+        android:id="@+id/arrow_right"
+        android:layout_width="50dp"
+        android:layout_height="80dp"
+        android:layout_gravity="end|center_vertical"
+        android:layout_marginEnd="@dimen/arrow_margin"
+        android:src="@drawable/arrow_right"
+        android:contentDescription="@string/savon" />
+
 </FrameLayout>

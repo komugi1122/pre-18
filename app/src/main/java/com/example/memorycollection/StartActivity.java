@@ -3,21 +3,22 @@ package com.example.memorycollection;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-public class StartActivity extends AppCompatActivity {
+public class StartActivity extends BaseActivity {
 
     private static final int REQUEST_PERMISSION = 100;
 
@@ -25,6 +26,11 @@ public class StartActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
+
+        // SettingManagerの初期化と設定
+        SettingManager settingManager = new SettingManager(this);
+        ImageButton settingButton = findViewById(R.id.setting);
+        settingManager.setupSettingButton(settingButton);
 
         // レイアウト全体をタップ可能に設定
         RelativeLayout layout = findViewById(R.id.startLayout);
@@ -44,6 +50,7 @@ public class StartActivity extends AppCompatActivity {
         TextView tapText = findViewById(R.id.tapText);
         Animation blinkAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_blink);
         tapText.startAnimation(blinkAnimation);
+        tapText.setTextColor(Color.GRAY);
     }
 
     // ストレージ権限が許可されているかチェック
