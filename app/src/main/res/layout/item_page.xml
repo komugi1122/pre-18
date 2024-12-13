@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         android:src="@drawable/background_museum"
         android:scaleType="centerCrop"
-        android:contentDescription="" />
+        android:contentDescription="Museum Background" />
 
     <!-- 写真 -->
     <ImageView
@@ -19,7 +19,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:scaleType="fitCenter"
-        android:contentDescription=""
+        android:contentDescription="Displayed Photo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_max="355dp"
@@ -29,4 +29,20 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.234"
         app:layout_constraintWidth_max="355dp" />
+
+    <!-- カテゴリ名 -->
+    <TextView
+        android:id="@+id/categoryTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="カテゴリ名"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        android:padding="8dp"
+        android:background="#88000000"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/photo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

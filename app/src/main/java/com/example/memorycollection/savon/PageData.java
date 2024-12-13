@@ -1,21 +1,22 @@
 package com.example.memorycollection.savon;
 
-import com.example.memorycollection.R;
+import android.net.Uri;
 
 public class PageData {
-    private final int backgroundImageResId;
-    private final int photoResId;
+    private Uri imageUri;
+    private int category;
 
-    public PageData(int photoResId) {
-        this.backgroundImageResId = R.drawable.background_museum;
-        this.photoResId = photoResId;
+    public PageData(Uri imageUri, int category) {
+        this.imageUri = imageUri;
+        this.category = category;
     }
 
-    public int getBackgroundImageResId() {
-        return backgroundImageResId;
+    public Uri getImageUri() {
+        return imageUri;
     }
 
-    public int getPhotoResId() {
-        return photoResId;
+    public int getCategory() {
+        return category;
     }
 }
+
