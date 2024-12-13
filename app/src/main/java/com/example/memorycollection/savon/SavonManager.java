@@ -35,7 +35,7 @@ public class SavonManager {
 
     public void stopGeneratingSavon(FrameLayout parentLayout) {
         isRunning = false;
-        handler.removeCallbacksAndMessages(null); // 全ての生成タスクをキャンセル
+        handler.removeCallbacksAndMessages(null); // 全ての生成タスク���キャンセル
 
         // 全てのsavonを削除
         for (ImageView savon : savonList) {
@@ -51,7 +51,7 @@ public class SavonManager {
         createSavon(parentLayout);
 
         // 次の生成までの遅延時間をランダムに設定
-        int delay = 250 + random.nextInt(250);
+        int delay = 250 + random.nextInt(150);
         handler.postDelayed(() -> generateSavon(parentLayout), delay);
     }
 
@@ -93,7 +93,17 @@ public class SavonManager {
         // 初期位置の設定
         savonImage.setTranslationY(800f);
 
+        // 通常シャボン玉のelevationを3fに設定（最背面）
+        savonImage.setElevation(3f);
+
         SavonAnimationManager animationManager = new SavonAnimationManager();
         animationManager.startFloatingAnimation(savonImage, parentLayout, savonList);
+    }
+
+    public void resumeGeneratingSavon(FrameLayout parentLayout) {
+        if (!isRunning) {
+            isRunning = true;
+            generateSavon(parentLayout);
+        }
     }
 }

@@ -2,11 +2,12 @@ package com.example.memorycollection.savon;
 
 import android.content.Context;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Gravity;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 
-import com.example.memorycollection.MemoryManager;
+import com.example.memorycollection.memory.MemoryManager;
 import com.example.memorycollection.R;
 
 import java.util.ArrayList;
@@ -14,17 +15,24 @@ import java.util.List;
 import java.util.Random;
 
 public class ButtonSavonManager {
-
     private final Context context;
+    private MemoryManager memoryManager;
     private final Random random = new Random();
     private final Handler handler = new Handler();
-    private boolean isRunning = false; // 実行状態を保持
-    private final List<ImageButton> savonList = new ArrayList<>(); // 現在生成されているsavonを保持
-    private final MemoryManager memoryManager;
+    private boolean isRunning = false;
+    private final List<ImageButton> savonList = new ArrayList<>();
 
     public ButtonSavonManager(Context context) {
         this.context = context;
         this.memoryManager = new MemoryManager(context);
+    }
+
+    public void setMemoryManager(MemoryManager memoryManager) {
+        this.memoryManager = memoryManager;
+    }
+
+    public MemoryManager getMemoryManager() {
+        return memoryManager;
     }
 
     public boolean isRunning() {
@@ -39,68 +47,79 @@ public class ButtonSavonManager {
 
     public void stopGeneratingSavon(FrameLayout parentLayout) {
         isRunning = false;
-        handler.removeCallbacksAndMessages(null); // 全ての生成タスクをキャンセル
+        handler.removeCallbacksAndMessages(null);
 
-        // 全てのsavonボタンを削除
         for (ImageButton savon : savonList) {
             parentLayout.removeView(savon);
         }
-        savonList.clear(); // リストをクリア
+        savonList.clear();
     }
 
     private void generateSavon(FrameLayout parentLayout) {
         if (!isRunning) return;
 
-        // savonを生成
         createSavon(parentLayout);
 
-        // 次の生成までの遅延時間（2～4秒）をランダムに設定
         int delay = 2000 + random.nextInt(2000);
         handler.postDelayed(() -> generateSavon(parentLayout), delay);
     }
 
     private void createSavon(FrameLayout parentLayout) {
+        Log.d("CountDebug", "シャボン玉生成開始");
         ImageButton savonImage = new ImageButton(context);
         savonImage.setImageResource(R.drawable.insavon);
         savonImage.setBackground(null);
 
-        // ランダムなX軸の位置を計算　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　
         int parentWidth = parentLayout.getWidth();
-        int buttonWidth = 450; // ボタンの幅（デフォルト値）。必要に応じて正確な値に置き換え。
+        int buttonWidth = 450;
         int maxX = Math.max(1, parentWidth - buttonWidth);
         int randomX = random.nextInt(maxX);
 
-        // LayoutParamsで位置を指定
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.WRAP_CONTENT,
                 FrameLayout.LayoutParams.WRAP_CONTENT
         );
         params.gravity = Gravity.BOTTOM;
-        params.leftMargin = randomX; // ランダムなX軸の位置を設定
-        params.bottomMargin = 50; // 初期位置を画面下部に設定
+        params.leftMargin = randomX;
+        params.bottomMargin = 50;
         savonImage.setLayoutParams(params);
 
-        // レイアウトに追加
         parentLayout.addView(savonImage);
-        savonList.add(savonImage); // リストに追加
+        savonList.add(savonImage);
 
-        // 初期位置の設定
         savonImage.setTranslationY(800f);
 
-        //シャボンのアニメーション
         SavonAnimationManager animationManager = new SavonAnimationManager();
         animationManager.startFloatingAnimation(savonImage, parentLayout, savonList);
 
-        // savonのクリックリスナー（アニメーション停止と削除）
         savonImage.setOnClickListener(v -> {
+            Log.d("CountDebug", "シャボン玉をタップ - 現在のカウント: " + memoryManager.getCountManager().getCurrentCount());
+            
+            int[] viewLocation = new int[2];
+            int[] parentLocation = new int[2];
+            
+            v.getLocationInWindow(viewLocation);
+            parentLayout.getLocationInWindow(parentLocation);
+            
+            int x = viewLocation[0] - parentLocation[0];
+            int y = viewLocation[1] - parentLocation[1];
+            
             animationManager.stopAnimation();
-            
-            // メモリーを作成
-            memoryManager.createMemoryAtLocation(v, parentLayout);
-            
-            // シャボンを削除
             parentLayout.removeView(savonImage);
             savonList.remove(savonImage);
+
+            Log.d("CountDebug", "グレースケール画像生成前のカウント: " + memoryManager.getCountManager().getCurrentCount());
+            memoryManager.createMemoryAtLocation(x, y, parentLayout);
+            Log.d("CountDebug", "グレースケール画像生成後のカウント: " + memoryManager.getCountManager().getCurrentCount());
         });
+
+        savonImage.setElevation(10f);
+    }
+
+    public void resumeGeneratingSavon(FrameLayout parentLayout) {
+        if (!isRunning) {
+            isRunning = true;
+            generateSavon(parentLayout);
+        }
     }
 }
