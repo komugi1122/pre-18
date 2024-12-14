@@ -2,6 +2,7 @@ package com.example.memorycollection;
 
 import android.content.ContentUris;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -60,7 +61,14 @@ public class MuseumActivity extends AppCompatActivity {
 
         // 戻るボタンの設定
         ImageButton backButton = findViewById(R.id.backButton);
-        backButton.setOnClickListener(v -> finish());
+        backButton.setOnClickListener(v -> {
+            // MainActivity（ViewPager2を含む画面）に遷移し、screen2_door.xmlを表示
+            Intent intent = new Intent(MuseumActivity.this, MainActivity.class);
+            // ViewPager2でscreen2_door.xmlを表示するためのフラグを追加
+            intent.putExtra("showScreen2", true);
+            startActivity(intent);
+            finish(); // 現在の画面を終了
+        });
 
         // ソートボタンの設定
         Button sortButton = findViewById(R.id.sortButton); // XML にボタンを追加

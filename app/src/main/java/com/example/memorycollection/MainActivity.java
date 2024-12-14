@@ -143,7 +143,12 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-
+        // 遷移フラグをチェック
+        boolean showScreen2 = getIntent().getBooleanExtra("showScreen2", false);
+        if (showScreen2) {
+            // screen2_door.xmlを表示（インデックス1）
+            viewPager.setCurrentItem(1);
+        }
     }
 
 }
