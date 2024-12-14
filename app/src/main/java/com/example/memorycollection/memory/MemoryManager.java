@@ -34,7 +34,7 @@ public class MemoryManager {
 
     public void createMemoryAtLocation(int x, int y, FrameLayout parentLayout) {
         Log.d("CountDebug", "MemoryManager - createMemoryAtLocation開始");
-        
+
         if (!getMemory.hasStoragePermission()) {
             Toast.makeText(context, "ストレージへのアクセス権限が必要です", Toast.LENGTH_SHORT).show();
             return;
@@ -44,7 +44,7 @@ public class MemoryManager {
         if (randomImageUri != null) {
             try {
                 Bitmap originalBitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), randomImageUri);
-                
+
                 // 画像の向きを取得
                 ExifInterface exif = new ExifInterface(getMemory.getRealPathFromURI(randomImageUri));
                 int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
@@ -64,12 +64,12 @@ public class MemoryManager {
                 }
 
                 // 回転補正を適用
-                originalBitmap = Bitmap.createBitmap(originalBitmap, 0, 0, 
-                    originalBitmap.getWidth(), originalBitmap.getHeight(), matrix, true);
+                originalBitmap = Bitmap.createBitmap(originalBitmap, 0, 0,
+                        originalBitmap.getWidth(), originalBitmap.getHeight(), matrix, true);
 
                 // アスペクト比を計算
                 float aspectRatio = (float) originalBitmap.getWidth() / originalBitmap.getHeight();
-                
+
                 // 目標サイズを設定（固定値）
                 int targetWidth, targetHeight;
                 if (aspectRatio > 1.0f) {
@@ -84,7 +84,7 @@ public class MemoryManager {
 
                 // リサイズ
                 Bitmap resizedBitmap = Bitmap.createScaledBitmap(originalBitmap, targetWidth, targetHeight, true);
-                
+
                 // グレースケール処理
                 Bitmap grayscaleBitmap = getMemory.applyGrayscaleFilter(resizedBitmap);
 
@@ -92,6 +92,7 @@ public class MemoryManager {
                 ImageButton imageButton = new ImageButton(context);
                 imageButton.setImageBitmap(grayscaleBitmap);
                 imageButton.setBackgroundResource(android.R.color.transparent);
+                imageButton.setZ(1000);
 
                 // スクリーンの寸法を取得
                 int screenWidth = parentLayout.getWidth();
@@ -143,7 +144,7 @@ public class MemoryManager {
         String[] proj = {MediaStore.Images.Media.DATA};
         Cursor cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
         if (cursor == null) return null;
-        
+
         int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
         cursor.moveToFirst();
         String path = cursor.getString(column_index);

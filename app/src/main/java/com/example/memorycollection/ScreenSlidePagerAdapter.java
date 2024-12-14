@@ -29,8 +29,8 @@ public class ScreenSlidePagerAdapter extends RecyclerView.Adapter<ScreenSlidePag
     private ImageButton executeButton;
     private CountManager countManager;
 
-    public ScreenSlidePagerAdapter(Context context, int[] layouts, 
-            SavonManager savonManager, ButtonSavonManager buttonSavonManager) {
+    public ScreenSlidePagerAdapter(Context context, int[] layouts,
+                                   SavonManager savonManager, ButtonSavonManager buttonSavonManager) {
         this.context = context;
         this.layouts = layouts;
         this.savonManager = savonManager;
@@ -59,13 +59,13 @@ public class ScreenSlidePagerAdapter extends RecyclerView.Adapter<ScreenSlidePag
 
             // ResetMemoryの初期化と設定
             ResetMemory resetMemory = new ResetMemory(
-                context, 
-                savonManager, 
-                buttonSavonManager, 
-                countManager,
-                executeButton,
-                resetButton,
-                startLayout
+                    context,
+                    savonManager,
+                    buttonSavonManager,
+                    countManager,
+                    executeButton,
+                    resetButton,
+                    startLayout
             );
             resetMemory.setupResetButton();
 

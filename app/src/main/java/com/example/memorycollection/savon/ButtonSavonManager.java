@@ -69,6 +69,7 @@ public class ButtonSavonManager {
         ImageButton savonImage = new ImageButton(context);
         savonImage.setImageResource(R.drawable.insavon);
         savonImage.setBackground(null);
+        savonImage.setZ(100);
 
         int parentWidth = parentLayout.getWidth();
         int buttonWidth = 450;
@@ -94,16 +95,16 @@ public class ButtonSavonManager {
 
         savonImage.setOnClickListener(v -> {
             Log.d("CountDebug", "シャボン玉をタップ - 現在のカウント: " + memoryManager.getCountManager().getCurrentCount());
-            
+
             int[] viewLocation = new int[2];
             int[] parentLocation = new int[2];
-            
+
             v.getLocationInWindow(viewLocation);
             parentLayout.getLocationInWindow(parentLocation);
-            
+
             int x = viewLocation[0] - parentLocation[0];
             int y = viewLocation[1] - parentLocation[1];
-            
+
             animationManager.stopAnimation();
             parentLayout.removeView(savonImage);
             savonList.remove(savonImage);
