@@ -11,6 +11,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.memorycollection.savon.DataManager;
 import com.example.memorycollection.savon.PageAdapter;
 import com.example.memorycollection.savon.PageData;
 
@@ -26,20 +27,28 @@ public class MuseumActivity extends AppCompatActivity {
     private List<PageData> pageDataList; // 写真リスト
     private PageAdapter pageAdapter;
     private ViewPager2 viewPager;
+    private DataManager dataManager; // データ管理用
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_museum);
 
-        // 写真リスト初期化
-        pageDataList = new ArrayList<>();
+        // DataManagerを初期化
+        dataManager = new DataManager(this);
+
+        // 写真リストを復元
+        pageDataList = dataManager.loadPageDataList();
+        if(pageDataList == null){
+            pageDataList = new ArrayList<>();
+        }
 
         // ViewPager2 の設定
         viewPager = findViewById(R.id.viewPager);
         pageAdapter = new PageAdapter(pageDataList, this);
         viewPager.setAdapter(pageAdapter);
 
+        /*
         // テスト用: 初期写真を追加
         addPhotoToMuseum(
                 Uri.parse("android.resource://" + getPackageName() + "/" + R.drawable.photo_1),
@@ -53,6 +62,8 @@ public class MuseumActivity extends AppCompatActivity {
                 Uri.parse("android.resource://" + getPackageName() + "/" + R.drawable.photo_3),
                 8
         );
+        */
+
 
         // 戻るボタンの設定
         Button backButton = findViewById(R.id.backButton);
@@ -67,6 +78,10 @@ public class MuseumActivity extends AppCompatActivity {
         // カテゴリー選択ボタン設定
         Button selectCategoryButton = findViewById(R.id.selectCategoryButton);
         selectCategoryButton.setOnClickListener(v -> showCategoryDialog());
+
+        // onCreateメソッドに消去ボタンの設定を追加
+        Button deleteButton = findViewById(R.id.deleteButton); // deleteButtonはXMLで定義してください
+        deleteButton.setOnClickListener(v -> showDeleteConfirmationDialog());
     }
 
     /**
@@ -76,11 +91,21 @@ public class MuseumActivity extends AppCompatActivity {
      * @param category 写真のカテゴリー (0,1,2,3,4のいずれか)
      */
     public void addPhotoToMuseum(Uri photoUri, int category) {
+        if (photoUri == null) {
+            Toast.makeText(this, "写真の URI が無効です", Toast.LENGTH_SHORT).show();
+            return;
+        }
         // 写真データを作成
         PageData newPageData = new PageData(photoUri, category);
 
         // リストに追加
         pageDataList.add(newPageData);
+
+        // 保存
+        dataManager.savePageDataList(pageDataList);
+
+        //通知
+        Log.d("addPhotoToMuseum", "Photo URI: " + photoUri);
 
         // Adapter に通知
         pageAdapter.notifyDataSetChanged();
@@ -105,6 +130,9 @@ public class MuseumActivity extends AppCompatActivity {
             Log.d("SortPhotos", "Photo URI: " + pageData.getImageUri() + ", Date Taken: " + formattedDate);
         }
 
+        // ソート後にデータを保存
+        dataManager.savePageDataList(pageDataList);
+
         // Adapter に変更を通知
         pageAdapter.notifyDataSetChanged();
     }
@@ -122,6 +150,9 @@ public class MuseumActivity extends AppCompatActivity {
 
             return Integer.compare(category1, category2); // 通常のカテゴリー順
         });
+
+        // ソート後にデータを保存
+        dataManager.savePageDataList(pageDataList);
 
         // ソート後、Adapterに変更を通知
         pageAdapter.notifyDataSetChanged();
@@ -164,7 +195,60 @@ public class MuseumActivity extends AppCompatActivity {
         if (viewPager.getCurrentItem() >= 0 && viewPager.getCurrentItem() < pageDataList.size()) {
             PageData currentPageData = pageDataList.get(viewPager.getCurrentItem());
             currentPageData.setCategory(newCategory);
+
+            // 保存
+            dataManager.savePageDataList(pageDataList);
+
+            // Adapterに変更を通知
             pageAdapter.notifyItemChanged(viewPager.getCurrentItem()); // 変更をアダプターに通知
         }
     }
+
+    // 写真消去
+    // 最初の確認ダイアログ
+    private void showDeleteConfirmationDialog() {
+        new AlertDialog.Builder(this)
+                .setMessage("写真を消去しますか？")
+                .setPositiveButton("はい", (dialog, id) -> showSecondConfirmationDialog())  // 2番目のダイアログを表示
+                .setNegativeButton("いいえ", null)
+                .show();
+    }
+
+    // 2番目の確認ダイアログ
+    private void showSecondConfirmationDialog() {
+        new AlertDialog.Builder(this)
+                .setMessage("本当に消しますか？")
+                .setPositiveButton("はい", (dialog, id) -> showThirdConfirmationDialog())  // 3番目のダイアログを表示
+                .setNegativeButton("いいえ", null)
+                .show();
+    }
+
+    // 3番目の確認ダイアログ
+    private void showThirdConfirmationDialog() {
+        new AlertDialog.Builder(this)
+                .setMessage("後悔しませんね？")
+                .setPositiveButton("はい", (dialog, id) -> deletePhoto())  // 写真を消去
+                .setNegativeButton("いいえ", null)
+                .show();
+    }
+
+    // 写真を消去する処理
+    private void deletePhoto() {
+        // 現在表示されている写真のUriを取得
+        int currentItemPosition = viewPager.getCurrentItem();
+        if (currentItemPosition >= 0 && currentItemPosition < pageDataList.size()) {
+            PageData pageData = pageDataList.get(currentItemPosition);
+            pageDataList.remove(currentItemPosition); // 写真をリストから削除
+
+            // 保存
+            dataManager.savePageDataList(pageDataList);
+
+            // Adapterに通知
+            pageAdapter.notifyItemRemoved(currentItemPosition); // 変更をアダプターに通知
+
+            // 通知
+            Toast.makeText(MuseumActivity.this, "写真を消去しました", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 }

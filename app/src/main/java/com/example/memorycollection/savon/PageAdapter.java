@@ -88,7 +88,7 @@ public class PageAdapter extends RecyclerView.Adapter<PageAdapter.PageViewHolder
 
     @Override
     public int getItemCount() {
-        return pageDataList.size();
+        return (pageDataList != null) ? pageDataList.size() : 0; // pageDataListがnullの場合、0を返す
     }
 
     // カテゴリ名を取得するメソッド
