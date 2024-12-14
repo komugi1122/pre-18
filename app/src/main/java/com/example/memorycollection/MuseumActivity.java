@@ -8,10 +8,12 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.memorycollection.savon.DataManager;
@@ -54,7 +56,7 @@ public class MuseumActivity extends AppCompatActivity {
         viewPager.setAdapter(pageAdapter);
 
         // 戻るボタンの設定
-        Button backButton = findViewById(R.id.backButton);
+        ImageButton backButton = findViewById(R.id.backButton);
         backButton.setOnClickListener(v -> finish());
 
         // ソートボタンの設定
@@ -68,12 +70,17 @@ public class MuseumActivity extends AppCompatActivity {
         selectCategoryButton.setOnClickListener(v -> showCategoryDialog());
 
         // onCreateメソッドに消去ボタンの設定を追加
-        Button deleteButton = findViewById(R.id.deleteButton); // deleteButtonはXMLで定義してください
+        ImageButton deleteButton = findViewById(R.id.deleteButton); // deleteButtonはXMLで定義してください
         deleteButton.setOnClickListener(v -> showDeleteConfirmationDialog());
 
+        // デバッグ用
         // ランダム写真追加ボタン設定
         Button randomButton = findViewById(R.id.randomButton);
         randomButton.setOnClickListener(v -> addRandomPhotoToMuseum());
+
+        // 回転ボタンの設定
+        Button rotateButton = findViewById(R.id.rotateButton);
+        rotateButton.setOnClickListener(v -> rotateCurrentPhoto());
     }
 
     /**
@@ -283,5 +290,23 @@ public class MuseumActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * 現在表示中の写真を回転
+     */
+    private void rotateCurrentPhoto() {
+        // 現在のアイテムの位置を取得
+        int currentItemPosition = viewPager.getCurrentItem();
+
+        // 現在のアイテムの View を取得
+        RecyclerView recyclerView = (RecyclerView) viewPager.getChildAt(0);
+        RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForAdapterPosition(currentItemPosition);
+
+        if (viewHolder instanceof PageAdapter.PageViewHolder) {
+            // 回転を適用
+            PageAdapter.PageViewHolder pageViewHolder = (PageAdapter.PageViewHolder) viewHolder;
+            pageViewHolder.rotatePhoto(90f); // 90度回転
+        }
     }
 }
