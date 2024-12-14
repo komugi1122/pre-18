@@ -41,6 +41,10 @@ public class MuseumActivity extends AppCompatActivity {
                 Uri.parse("android.resource://" + getPackageName() + "/" + R.drawable.photo_2),
                 1
         );
+        addPhotoToMuseum(
+                Uri.parse("android.resource://" + getPackageName() + "/" + R.drawable.photo_3),
+                2
+        );
 
         // 戻るボタンの設定
         Button backButton = findViewById(R.id.backButton);
