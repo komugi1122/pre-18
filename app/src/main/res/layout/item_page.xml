@@ -14,6 +14,15 @@
         android:scaleType="centerCrop"
         android:contentDescription="Museum Background" />
 
+    <!-- 額縁の背景色 -->
+    <View
+        android:layout_width="@+id/frame"
+        android:layout_height="@+id/frame"
+        app:layout_constraintBottom_toBottomOf="@id/frame"
+        app:layout_constraintEnd_toEndOf="@id/frame"
+        app:layout_constraintStart_toStartOf="@id/frame"
+        app:layout_constraintTop_toTopOf="@id/frame"
+        android:background="@color/white"/>
     <!-- 写真 -->
     <ImageView
         android:id="@+id/photo"

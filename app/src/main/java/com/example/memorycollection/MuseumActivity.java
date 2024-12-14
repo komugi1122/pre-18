@@ -41,6 +41,9 @@ public class MuseumActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_museum);
 
+        // 美術館用のBGM再生
+        MusicManager.playBGM(this, R.raw.museum);
+
         // DataManagerを初期化
         dataManager = new DataManager(this);
 
@@ -61,9 +64,15 @@ public class MuseumActivity extends AppCompatActivity {
 
         // ソートボタンの設定
         Button sortButton = findViewById(R.id.sortButton); // XML にボタンを追加
-        sortButton.setOnClickListener(v -> sortPhotosByDate());
+        sortButton.setOnClickListener(v -> {
+            sortPhotosByDate();
+            Toast.makeText(this, "日時でソートしました", Toast.LENGTH_SHORT).show();
+        });
         Button sortCategoryButton = findViewById(R.id.sortCategoryButton); // カテゴリー順ソートボタンのIDを確認
-        sortCategoryButton.setOnClickListener(v -> sortPhotosByCategory());
+        sortCategoryButton.setOnClickListener(v -> {
+            sortPhotosByCategory();
+            Toast.makeText(this, "カテゴリーでソートしました", Toast.LENGTH_SHORT).show();
+        });
 
         // カテゴリー選択ボタン設定
         Button selectCategoryButton = findViewById(R.id.selectCategoryButton);
@@ -308,5 +317,19 @@ public class MuseumActivity extends AppCompatActivity {
             PageAdapter.PageViewHolder pageViewHolder = (PageAdapter.PageViewHolder) viewHolder;
             pageViewHolder.rotatePhoto(90f); // 90度回転
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // アクティビティが停止する際に元のBGMに切り替える
+        MusicManager.playBGM(this, R.raw.mainmenu);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // 再度美術館用BGMを再生
+        MusicManager.playBGM(this, R.raw.museum);
     }
 }
