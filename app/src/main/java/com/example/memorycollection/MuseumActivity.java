@@ -82,10 +82,12 @@ public class MuseumActivity extends AppCompatActivity {
         ImageButton deleteButton = findViewById(R.id.deleteButton); // deleteButtonはXMLで定義してください
         deleteButton.setOnClickListener(v -> showDeleteConfirmationDialog());
 
+        /*
         // デバッグ用
         // ランダム写真追加ボタン設定
         Button randomButton = findViewById(R.id.randomButton);
         randomButton.setOnClickListener(v -> addRandomPhotoToMuseum());
+        */
 
         // 回転ボタンの設定
         Button rotateButton = findViewById(R.id.rotateButton);
