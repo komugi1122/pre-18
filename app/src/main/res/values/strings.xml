@@ -12,8 +12,8 @@
 
     <string name="left_arrow">左</string>
     <string name="right_arrow">右</string>
-    <string name="sortbydate">Sort by Date</string>
-    <string name="sortbycategory">Sort by Category</string>
+    <string name="sortbydate">日時順にソート</string>
+    <string name="sortbycategory">カテゴリー順にソート</string>
     <string name="selectCategory">カテゴリー選択</string>
 
 </resources>

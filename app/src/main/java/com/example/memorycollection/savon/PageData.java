@@ -11,6 +11,17 @@ import java.io.Serializable;
 public class PageData implements Serializable {
     private String imageUriString; // Uri を文字列で保持
     private int category;
+    // PageData.java 内
+    private float rotationAngle = 0f; // 回転角度を保存
+
+    public float getRotationAngle() {
+        return rotationAngle;
+    }
+
+    public void setRotationAngle(float angle) {
+        this.rotationAngle = angle;
+    }
+
 
     public PageData(Uri imageUri, int category) {
         this.imageUriString = imageUri.toString(); // Uri を文字列に変換して保存

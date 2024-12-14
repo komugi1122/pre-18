@@ -30,38 +30,39 @@
         android:layout_height="match_parent" />
 
     <!-- 戻るボタン -->
-    <Button
+    <ImageButton
         android:id="@+id/backButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/returnToScreen2"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_margin="16dp"
         android:textSize="16sp"
-        android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_margin="16dp" />
+        app:srcCompat="@drawable/back"
+        android:scaleType="fitCenter"
+        android:backgroundTint="#FFFFFF"/>
 
     <!-- 撮影日時順でソート -->
     <Button
         android:id="@+id/sortButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:textSize="13sp"
         android:text="@string/sortbydate"
-        app:layout_constraintBottom_toTopOf="@id/sortCategoryButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="8dp" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/sortCategoryButton"/>
 
     <!-- カテゴリー順でソート -->
     <Button
         android:id="@+id/sortCategoryButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:textSize="13sp"
         android:text="@string/sortbycategory"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="16dp" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
     <!-- カテゴリーを選択する -->
     <Button
@@ -69,35 +70,37 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/selectCategory"
-        app:layout_constraintStart_toEndOf="@+id/sortButton"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="16dp"
+        android:textSize="13dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_margin="16dp"
         android:layout_marginEnd="16dp" />
 
     <!-- 消去ボタン -->
-    <Button
+    <ImageButton
         android:id="@+id/deleteButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="消去"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:onClick="onDeleteButtonClick" />
+        android:layout_margin="16dp"
+        android:onClick="onDeleteButtonClick"
+        app:srcCompat="@drawable/trash"
+        android:scaleType="fitCenter"
+        app:layout_constraintLeft_toRightOf="@id/backButton"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:backgroundTint="#FFFFFF"/>
 
-    <!-- ランダムに選択ボタン -->
+    <!-- 回転ボタン -->
     <Button
-        android:id="@+id/randomButton"
+        android:id="@+id/rotateButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="ランダム"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:onClick="onRandomButtonClick" />
+        android:text="90°回転"
+        android:textSize="13dp"
+        android:layout_margin="16dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

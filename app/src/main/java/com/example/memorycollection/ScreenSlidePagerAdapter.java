@@ -2,6 +2,7 @@ package com.example.memorycollection;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,6 +48,9 @@ public class ScreenSlidePagerAdapter extends RecyclerView.Adapter<ScreenSlidePag
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         if (position == 0) { // screen1_savon.xmlの場合
+            // mainmenuのBGMを再生
+            MusicManager.playBGM(context, R.raw.mainmenu);
+
             executeButton = holder.itemView.findViewById(R.id.executeButton);
             FrameLayout startLayout = holder.itemView.findViewById(R.id.startLayout);
             ImageButton resetButton = holder.itemView.findViewById(R.id.resetButton);
@@ -94,15 +98,26 @@ public class ScreenSlidePagerAdapter extends RecyclerView.Adapter<ScreenSlidePag
             
             Button museumButton = holder.itemView.findViewById(R.id.museumButton);
             museumButton.setOnClickListener(v -> {
-            Intent intent = new Intent(context, MuseumActivity.class);
-            context.startActivity(intent); // 美術館画面に遷移
+                Intent intent = new Intent(context, MuseumActivity.class);
+                context.startActivity(intent); // 美術館画面に遷移
+
+                // 美術館用BGMに切り替え
+                MusicManager.playBGM(context, R.raw.museum);
             });
+
         }
 }
 
     @Override
     public int getItemCount() {
         return layouts.length;
+    }
+
+    @Override
+    public void onViewRecycled(@NonNull ViewHolder holder) {
+        super.onViewRecycled(holder);
+        // Recycled される際にMediaPlayerを解放する
+        MusicManager.stopBGM();
     }
 
     @Override

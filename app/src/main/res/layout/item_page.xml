@@ -14,39 +14,47 @@
         android:scaleType="centerCrop"
         android:contentDescription="Museum Background" />
 
+    <!-- 額縁の背景色 -->
+    <View
+        android:layout_width="@+id/frame"
+        android:layout_height="@+id/frame"
+        app:layout_constraintBottom_toBottomOf="@id/frame"
+        app:layout_constraintEnd_toEndOf="@id/frame"
+        app:layout_constraintStart_toStartOf="@id/frame"
+        app:layout_constraintTop_toTopOf="@id/frame"
+        android:background="@color/white"/>
     <!-- 写真 -->
     <ImageView
         android:id="@+id/photo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="320dp"
+        android:layout_height="320dp"
         android:scaleType="fitCenter"
         android:contentDescription="Displayed Photo"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_max="355dp"
-        app:layout_constraintHorizontal_bias="0.497"
+        android:layout_margin="18dp"
+        app:layout_constraintBottom_toBottomOf="@id/frame"
+        app:layout_constraintEnd_toEndOf="@id/frame"
+        app:layout_constraintHeight_max="320dp"
 
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.234"
+        app:layout_constraintStart_toStartOf="@id/frame"
+        app:layout_constraintTop_toTopOf="@id/frame"
         app:layout_constraintWidth_max="320dp" />
 
     <!-- 額縁 -->
     <ImageView
         android:id="@+id/frame"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="356dp"
+        android:layout_height="356dp"
         android:scaleType="fitCenter"
         android:contentDescription="Displayed Flame"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_max="355dp"
+        app:layout_constraintHeight_max="356dp"
         app:layout_constraintHorizontal_bias="0.497"
 
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.234"
-        app:layout_constraintWidth_max="320dp">
+        app:layout_constraintWidth_max="356dp">
     </ImageView>
 
     <!-- カテゴリ名 -->
