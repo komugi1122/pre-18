@@ -27,7 +27,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginBottom="16dp"
         android:background="@null"
-        android:src="@drawable/setting_icon"
+        android:src="@drawable/re_icon"
         android:contentDescription="@string/savon"/>
 
     <ImageView

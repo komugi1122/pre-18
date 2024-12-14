@@ -303,6 +303,9 @@ public class MuseumActivity extends AppCompatActivity {
         return null;
     }
 
+
+
+
     /**
      * 現在表示中の写真を回転
      */
@@ -335,3 +338,4 @@ public class MuseumActivity extends AppCompatActivity {
         MusicManager.playBGM(this, R.raw.museum);
     }
 }
+

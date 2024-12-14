@@ -34,6 +34,7 @@ android {
 dependencies {
     implementation(libs.picasso)
     implementation("com.google.code.gson:gson:2.10.1")
+    implementation ("androidx.exifinterface:exifinterface:1.3.6")
 
     implementation(libs.appcompat)
     implementation(libs.material)

@@ -1,7 +1,7 @@
 package com.example.memorycollection;
 
 import android.content.Context;
-import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
@@ -17,74 +17,91 @@ public class OrderUrteil implements View.OnClickListener {
     private Context context;
     private RelativeLayout rootLayout;
     private ImageButton targetButton;
+    private ArrayList<Uri> selectedImages;  // 追加
 
-    public OrderUrteil(Context context, RelativeLayout rootLayout, ImageButton targetButton) {
+    public OrderUrteil(Context context, RelativeLayout rootLayout, ImageButton targetButton, ArrayList<Uri> selectedImages) {
         this.context = context;
         this.rootLayout = rootLayout;
         this.targetButton = targetButton;
+        this.selectedImages = selectedImages;  // 追加
     }
 
     @Override
     public void onClick(View v) {
-        ArrayList<ImageViewPosition> imageViews = new ArrayList<>();
+        ArrayList<UriPosition> uriList = new ArrayList<>();
+        ArrayList<Uri> currentUriList = new ArrayList<>(); // 現在の順序のUriリストを追加
 
+        // 現在の画像位置を取得
         for (int i = 0; i < rootLayout.getChildCount(); i++) {
             View child = rootLayout.getChildAt(i);
             if (child instanceof ImageView && child.getId() != R.id.remove_button) {
                 ImageView imageView = (ImageView) child;
-                BitmapDrawable drawable = (BitmapDrawable) imageView.getDrawable();
+                Uri imageUri = (Uri) imageView.getTag();
+                float yPosition = child.getY();
 
-                // 画像の情報を取得
-                int width = drawable.getBitmap().getWidth();
-                int height = drawable.getBitmap().getHeight();
-                String orientation = width > height ? "横長" : "縦長";
-
-                imageViews.add(new ImageViewPosition(
-                        imageView,
-                        child.getY(),
-                        orientation,
-                        width,
-                        height
-                ));
+                uriList.add(new UriPosition(imageUri, yPosition));
             }
         }
 
-        // Y座標で降順ソート（上から下の順）
-        Collections.sort(imageViews, new Comparator<ImageViewPosition>() {
+        // Y座標でソート
+        Collections.sort(uriList, new Comparator<UriPosition>() {
             @Override
-            public int compare(ImageViewPosition o1, ImageViewPosition o2) {
-                return Float.compare(o2.y, o1.y);
+            public int compare(UriPosition o1, UriPosition o2) {
+                if (o1.y > o2.y) return -1;
+                else if (o1.y < o2.y) return 1;
+                return 0;
             }
         });
 
-        // ログ出力
-        Log.d(TAG, "画像の順番（上から下）:");
-        for (int i = 0; i < imageViews.size(); i++) {
-            ImageViewPosition img = imageViews.get(i);
+        // UriPositionリストからUriリストを作成
+        for (UriPosition uriPosition : uriList) {
+            currentUriList.add(uriPosition.uri);
+        }
+
+        // OrderSuccessを使用して比較
+        OrderSuccess orderSuccess = new OrderSuccess(context);
+        orderSuccess.compareUriLists(selectedImages, currentUriList);
+
+        for (int i = 0; i < Math.min(selectedImages.size(), uriList.size()); i++) {
+            Uri originalUri = selectedImages.get(i);
+            Uri currentUri = uriList.get(i).uri;
+
+            if (!originalUri.equals(currentUri)) {
+                // 不一致の画像を探して震えるアニメーションを適用
+                for (int j = 0; j < rootLayout.getChildCount(); j++) {
+                    View child = rootLayout.getChildAt(j);
+                    if (child instanceof ImageView && child.getId() != R.id.remove_button) {
+                        Uri childUri = (Uri) ((ImageView) child).getTag();
+                        if (childUri.equals(currentUri)) {
+                            // 震えるアニメーションを適用
+                            OrderFail.playFailAnimation(child);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        // デバッグ用ログ出力
+        Log.d(TAG, "比較結果:");
+        for (int i = 0; i < Math.min(selectedImages.size(), uriList.size()); i++) {
             Log.d(TAG, String.format(
-                    "位置 %d: Y座標 = %.1f, 種類: %s (幅: %d, 高さ: %d)",
-                    (i + 1),
-                    img.y,
-                    img.orientation,
-                    img.width,
-                    img.height
+                    "インデックス %d: \n元の画像: %s \n現在の画像: %s \n一致: %s",
+                    i,
+                    selectedImages.get(i).toString(),
+                    uriList.get(i).uri.toString(),
+                    selectedImages.get(i).equals(uriList.get(i).uri)
             ));
         }
     }
 
-    private static class ImageViewPosition {
-        ImageView imageView;
+    private static class UriPosition {
+        Uri uri;
         float y;
-        String orientation;
-        int width;
-        int height;
 
-        ImageViewPosition(ImageView imageView, float y, String orientation, int width, int height) {
-            this.imageView = imageView;
+        UriPosition(Uri uri, float y) {
+            this.uri = uri;
             this.y = y;
-            this.orientation = orientation;
-            this.width = width;
-            this.height = height;
         }
     }
 }

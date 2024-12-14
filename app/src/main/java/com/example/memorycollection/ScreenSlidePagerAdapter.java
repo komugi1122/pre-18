@@ -92,17 +92,26 @@ public class ScreenSlidePagerAdapter extends RecyclerView.Adapter<ScreenSlidePag
                 buttonSavonManager.getMemoryManager().setCountManager(countManager);
             }
         } else if (position == 1) { // screen2_door.xmlの場合
+            FrameLayout screen2Layout = holder.itemView.findViewById(R.id.startLayout);
+
+            // screen2のViewGroupを設定
+            if (countManager != null) {
+                countManager.setScreen2ViewGroup(screen2Layout);
+            }
+
             ImageView arrowLeft = holder.itemView.findViewById(R.id.arrow_left);
             Animation blinkAnimation = AnimationUtils.loadAnimation(context, R.anim.fade_blink);
             arrowLeft.startAnimation(blinkAnimation);
-            
+
             Button museumButton = holder.itemView.findViewById(R.id.museumButton);
             museumButton.setOnClickListener(v -> {
                 Intent intent = new Intent(context, MuseumActivity.class);
+
                 context.startActivity(intent); // 美術館画面に遷移
 
                 // 美術館用BGMに切り替え
                 MusicManager.playBGM(context, R.raw.museum);
+
             });
 
         }
