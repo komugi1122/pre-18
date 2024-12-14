@@ -21,6 +21,7 @@ import java.util.Collections;
 
 public class OrderActivity extends BaseActivity {
     private MemoryManager memoryManager;
+    private ArrayList<Uri> selectedImages;  // フィールドとして追加
 
     private static final int long_len = 528;
     private static final int short_len = 297;
@@ -33,10 +34,18 @@ public class OrderActivity extends BaseActivity {
         // ルートレイアウトを取得
         RelativeLayout rootLayout = findViewById(R.id.root_layout);
 
-// ボタンを取得
+        // ボタンを取得
         ImageButton removeButton = findViewById(R.id.remove_button);
-// ボタンのクリックリスナーを設定
-        removeButton.setOnClickListener(new OrderUrteil(this, rootLayout, removeButton));
+
+        // Intentから選択された画像のUriリストを取得
+        selectedImages = getIntent().getParcelableArrayListExtra("selected_images");
+        if (selectedImages == null || selectedImages.isEmpty()) {
+            Toast.makeText(this, "選択された画像がありません", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // ボタンのクリックリスナーを設定（selectedImagesを渡す）
+        removeButton.setOnClickListener(new OrderUrteil(this, rootLayout, removeButton, selectedImages));
 
         // MemoryManagerインスタンスを作成
         memoryManager = new MemoryManager(this);
@@ -48,28 +57,26 @@ public class OrderActivity extends BaseActivity {
             return;
         }
 
-        Log.d("OrderActivity", "選択された画像の数: " + selectedImages.size());
+// 表示用の新しいリストを作成してシャッフル
+        ArrayList<Uri> displayImages = new ArrayList<>(selectedImages);
+        Collections.shuffle(displayImages);
 
-        // リストをランダムにシャッフル
-        Collections.shuffle(selectedImages);
-
-        // レイアウトが描画された後に画像を配置
+// レイアウトが描画された後に画像を配置
         rootLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                // レイアウトの描画が完了したのでリスナーを削除
                 rootLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
-                // 画像を順次表示
-                for (int i = 0; i < selectedImages.size(); i++) {
-                    Uri imageUri = selectedImages.get(i);
-                    Log.d("OrderActivity", "画像Uri: " + imageUri.toString()); // デバッグログを追加
+                // displayImagesを使用して画像を表示
+                for (int i = 0; i < displayImages.size(); i++) {
+                    Uri imageUri = displayImages.get(i);
                     try {
                         Bitmap processedImage = processImage(imageUri);
 
                         // 表示用のImageViewを作成
                         ImageView imageView = new ImageView(OrderActivity.this);
                         imageView.setImageBitmap(processedImage);
+                        imageView.setTag(imageUri);  // UriをImageViewのタグとして保存
 
                         // レイアウトパラメータを設定（ランダム配置）
                         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
@@ -80,7 +87,7 @@ public class OrderActivity extends BaseActivity {
                         params.topMargin = (int) (Math.random() * (rootLayout.getHeight() - processedImage.getHeight()));
                         imageView.setLayoutParams(params);
 
-// ドラッグ機能を追加
+                        // ドラッグ機能を追加
                         imageView.setOnTouchListener(new OrderMove(OrderActivity.this));
 
                         // ImageViewをルートレイアウトに追加
@@ -92,6 +99,14 @@ public class OrderActivity extends BaseActivity {
                 }
             }
         });
+
+        // 選択された画像のUriリストをログ出力
+        for (Uri uri : selectedImages) {
+            Log.d("OrderActivity", "選択された画像Uri: " + uri.toString());
+        }
+        for (Uri uri : displayImages) {
+            Log.d("OrderActivity", "シャッフルされた画像Uri: " + uri.toString());
+        }
     }
 
     /**

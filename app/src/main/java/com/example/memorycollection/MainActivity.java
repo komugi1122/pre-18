@@ -4,16 +4,16 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.memorycollection.savon.ButtonSavonManager;
 import com.example.memorycollection.savon.SavonManager;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     private SavonManager savonManager;
     private ButtonSavonManager buttonSavonManager;
@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
         ViewPager2 viewPager = findViewById(R.id.viewPager);
         adapter = new ScreenSlidePagerAdapter(this, layouts, savonManager, buttonSavonManager);
         viewPager.setAdapter(adapter);
+
 
         // ページ変更時のコールバックを設定
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
@@ -101,7 +102,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
-            @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
 
@@ -112,6 +112,13 @@ public class MainActivity extends AppCompatActivity {
                 if (position == 0) { // screen1_savonに移動した場合
                     // 通常のシャボン玉生成を開始（savon_s, savon_m, savon_l）
                     savonManager.startGeneratingSavon(findViewById(R.id.startLayout));
+
+                    // 実行ボタンの状態を確認
+                    ImageButton executeButton = currentView.findViewById(R.id.executeButton);
+                    if (executeButton != null && executeButton.getVisibility() == View.GONE) {
+                        // 実行ボタンが非表示（押された状態）の場合、insavonを再開
+                        buttonSavonManager.startGeneratingSavon(findViewById(R.id.startLayout));
+                    }
 
                     // arrow_rightのアニメーションをリセット
                     ImageView arrowRight = currentView.findViewById(R.id.arrow_right);
@@ -133,7 +140,6 @@ public class MainActivity extends AppCompatActivity {
                         arrowLeft.startAnimation(blinkAnimation);
                     }
                 }
-
             }
         });
 

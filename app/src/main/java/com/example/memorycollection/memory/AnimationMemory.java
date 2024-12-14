@@ -15,6 +15,8 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.memorycollection.OrderActivity;
+import com.example.memorycollection.savon.DataManager;
+import com.example.memorycollection.savon.PageData;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -57,6 +59,7 @@ public class AnimationMemory {
     private Runnable currentAnimation;
     private CountManager countManager;
     private final Context context;
+    private DataManager dataManager;
     private final ArrayList<MemoryInfo> colorMemories = new ArrayList<>();
     private final GetMemory getMemory;
     private static final String TAG = "MemoryArrayDebug";  // タグ名を変更
@@ -66,7 +69,8 @@ public class AnimationMemory {
 
     public AnimationMemory(Context context) {
         this.context = context;
-        this.getMemory = new GetMemory(context);
+        this.dataManager = new DataManager(context);
+        this.getMemory = new GetMemory(context);  // GetMemoryを初期化
     }
 
     public void setCountManager(CountManager countManager) {
@@ -107,6 +111,8 @@ public class AnimationMemory {
                 imageButton.setImageBitmap(colorBitmap);
                 isGrayscale = false;
 
+                addToMuseum(imageUri);
+
                 // 日時情報を取得して保存
                 long dateTime = getMemory.getImageDateTime(imageUri);
                 MemoryInfo memoryInfo = new MemoryInfo(
@@ -115,7 +121,7 @@ public class AnimationMemory {
                         imageUri
                 );
                 colorMemories.add(memoryInfo);
-                
+
 
 
 // 日時順に並び替え
@@ -299,5 +305,21 @@ public class AnimationMemory {
             handler.removeCallbacks(currentAnimation);
             currentAnimation = null;
         }
+    }
+
+    // 美術館に登録するメソッド
+    private void addToMuseum(Uri imageUri) {
+        // 現在の保存データを取得
+        List<PageData> pageDataList = dataManager.loadPageDataList();
+
+        // 新しいPageDataを作成（カテゴリーは未分類の-1）
+        PageData newPageData = new PageData(imageUri, -1);
+
+        // リストに追加
+        pageDataList.add(newPageData);
+
+        // 保存
+        dataManager.savePageDataList(pageDataList);
+
     }
 }
