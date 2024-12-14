@@ -6,18 +6,18 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.memorycollection.savon.ButtonSavonManager;
 import com.example.memorycollection.savon.SavonManager;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends AppCompatActivity {
 
     private SavonManager savonManager;
     private ButtonSavonManager buttonSavonManager;
     private ScreenSlidePagerAdapter adapter;
-    //githubのテストです！！byこむぎ
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,6 +136,7 @@ public class MainActivity extends BaseActivity {
 
             }
         });
+
 
     }
 

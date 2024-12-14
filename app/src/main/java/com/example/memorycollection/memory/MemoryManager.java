@@ -12,6 +12,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.example.memorycollection.memory.CountManager;
+
 public class MemoryManager {
     private final Context context;
     private final GetMemory getMemory;

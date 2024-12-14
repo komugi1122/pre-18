@@ -16,6 +16,12 @@
         android:textSize="24sp"
         android:fontFamily="@font/nikumaru"/>
 
+    <Button
+        android:id="@+id/museumButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/museum"/>
+
     <ImageView
         android:id="@+id/arrow_left"
         android:layout_width="50dp"
@@ -24,6 +30,5 @@
         android:layout_marginStart="@dimen/arrow_margin"
         android:src="@drawable/arrow_left"
         android:contentDescription="@string/savon" />
-
 
 </FrameLayout>

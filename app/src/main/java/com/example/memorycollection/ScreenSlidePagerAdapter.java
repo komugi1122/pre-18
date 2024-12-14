@@ -1,11 +1,13 @@
 package com.example.memorycollection;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -85,13 +87,18 @@ public class ScreenSlidePagerAdapter extends RecyclerView.Adapter<ScreenSlidePag
             if (buttonSavonManager != null) {
                 buttonSavonManager.getMemoryManager().setCountManager(countManager);
             }
-
         } else if (position == 1) { // screen2_door.xmlの場合
             ImageView arrowLeft = holder.itemView.findViewById(R.id.arrow_left);
             Animation blinkAnimation = AnimationUtils.loadAnimation(context, R.anim.fade_blink);
             arrowLeft.startAnimation(blinkAnimation);
+            
+            Button museumButton = holder.itemView.findViewById(R.id.museumButton);
+            museumButton.setOnClickListener(v -> {
+            Intent intent = new Intent(context, MuseumActivity.class);
+            context.startActivity(intent); // 美術館画面に遷移
+            });
         }
-    }
+}
 
     @Override
     public int getItemCount() {

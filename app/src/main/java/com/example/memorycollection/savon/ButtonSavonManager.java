@@ -7,8 +7,8 @@ import android.view.Gravity;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 
-import com.example.memorycollection.memory.MemoryManager;
 import com.example.memorycollection.R;
+import com.example.memorycollection.memory.MemoryManager;
 
 import java.util.ArrayList;
 import java.util.List;
