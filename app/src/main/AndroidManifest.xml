@@ -31,6 +31,9 @@
         <activity
             android:name=".MainActivity"
             android:exported="false" />
+
+        <activity android:name=".MuseumActivity" />
+
         <!-- セッティング画面のアクティビティ -->
         <activity
             android:name=".SettingActivity"
@@ -39,6 +42,7 @@
         <activity
             android:name=".OrderActivity"
             android:exported="false" />
+
     </application>
 
 
