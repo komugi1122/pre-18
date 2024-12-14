@@ -16,12 +16,9 @@ import android.widget.Toast;
 
 import com.example.memorycollection.OrderActivity;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 public class AnimationMemory {
     // 落下アニメーションの初期速度
@@ -60,10 +57,10 @@ public class AnimationMemory {
     private Runnable currentAnimation;
     private CountManager countManager;
     private final Context context;
-    private final ArrayList<MemoryCompare> colorMemories = new ArrayList<>();
+    private final ArrayList<MemoryInfo> colorMemories = new ArrayList<>();
     private final GetMemory getMemory;
     private static final String TAG = "MemoryArrayDebug";  // タグ名を変更
-    private final List<ImageButton> activeMemories = new ArrayList<>();  // 追加：���クティブな画像を管理
+    private final List<ImageButton> activeMemories = new ArrayList<>();  // 追加：アクティブな画像を管理
     private final List<AnimatorSet> activeAnimations = new ArrayList<>();  // 追加：実行中のアニメーションを管理
     private final Handler handler = new Handler();  // Handlerを追加
 
@@ -112,39 +109,45 @@ public class AnimationMemory {
 
                 // 日時情報を取得して保存
                 long dateTime = getMemory.getImageDateTime(imageUri);
-                MemoryCompare memory = new MemoryCompare(
+                MemoryInfo memoryInfo = new MemoryInfo(
                         colorBitmap.copy(colorBitmap.getConfig(), true),
                         dateTime,
                         imageUri
                 );
-                colorMemories.add(memory);
+                colorMemories.add(memoryInfo);
+                
 
-                // 日時順に並び替え
-                Collections.sort(colorMemories);
 
-                // 配列の状態のみをログ出力
-                Log.d(TAG, "=== メモリ配列の現在の状態 ===");
-                Log.d(TAG, "配列サイズ: " + colorMemories.size());
+// 日時順に並び替え
+                Collections.sort(colorMemories, (m1, m2) -> Long.compare(m1.getDateTime(), m2.getDateTime()));
+
+// ソート後のリストの状態をログ出力
+                Log.d("MemoryListDebug", "=== ソート後のメモリーリスト ===");
                 for (int i = 0; i < colorMemories.size(); i++) {
-                    MemoryCompare currentMemory = colorMemories.get(i);
-                    Log.d(TAG, String.format("位置[%d]: %s",
-                            i,
-                            new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault())
-                                    .format(new Date(currentMemory.getDateTime()))
-                    ));
+                    MemoryInfo memory = colorMemories.get(i);
+                    Log.d("MemoryListDebug", String.format("メモリー[%d]: 日時=%d, Uri=%s",
+                            i, memory.getDateTime(), memory.getImageUri()));
                 }
-                Log.d(TAG, "==========================");
 
-                Log.d("MemoryDebug", "保存された画像数: " + colorMemories.size());
-
-                // カウントを増やす
+// カウントを増やす
                 countManager.incrementCount();
                 Log.d("CountDebug", "カウント後: " + countManager.getCurrentCount());
 
-                // 3枚目の画像が表示された後、1秒後に画面遷移
+// OrderActivityへの遷移時にUriリストを渡す部分
                 if (countManager.getCurrentCount() >= MAX_MEMORIES) {
                     new Handler().postDelayed(() -> {
                         Intent intent = new Intent(context, OrderActivity.class);
+
+                        // UriリストをIntentに渡す
+                        ArrayList<Uri> selectedImageUris = new ArrayList<>();
+                        Log.d("MemoryListDebug", "=== OrderActivityに渡すUriリスト ===");
+                        for (MemoryInfo info : colorMemories) {
+                            Uri uri = info.getImageUri();
+                            Log.d("MemoryListDebug", "Uri追加: " + uri.toString());
+                            selectedImageUris.add(uri);
+                        }
+                        intent.putParcelableArrayListExtra("selected_images", selectedImageUris);
+
                         context.startActivity(intent);
                     }, TRANSITION_DELAY);
                 }
@@ -264,12 +267,8 @@ public class AnimationMemory {
     }
 
     // 並び替えられた画像を取得
-    public ArrayList<Bitmap> getColorMemories() {
-        ArrayList<Bitmap> sortedBitmaps = new ArrayList<>();
-        for (MemoryCompare memory : colorMemories) {
-            sortedBitmaps.add(memory.getBitmap());
-        }
-        return sortedBitmaps;
+    public ArrayList<MemoryInfo> getColorMemories() {
+        return new ArrayList<>(colorMemories);
     }
 
     public void clearColorMemories() {

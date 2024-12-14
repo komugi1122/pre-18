@@ -5,7 +5,7 @@
     android:id="@+id/startLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/main_background1">
+    android:background="@drawable/left_background0">
 
     <!-- 中央のタイトル画像 -->
     <ImageView

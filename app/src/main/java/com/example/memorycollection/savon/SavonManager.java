@@ -58,6 +58,7 @@ public class SavonManager {
     private void createSavon(FrameLayout parentLayout) {
         ImageView savonImage = new ImageView(context);
         savonImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        savonImage.setZ(1);
 
         // savonのサイズとリソースを設定
         int resourceId;

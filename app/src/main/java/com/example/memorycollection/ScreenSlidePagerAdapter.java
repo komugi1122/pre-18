@@ -13,11 +13,10 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.memorycollection.savon.ButtonSavonManager;
-import com.example.memorycollection.savon.SavonManager;
-import com.example.memorycollection.memory.MemoryManager;
 import com.example.memorycollection.memory.CountManager;
 import com.example.memorycollection.memory.ResetMemory;
+import com.example.memorycollection.savon.ButtonSavonManager;
+import com.example.memorycollection.savon.SavonManager;
 
 public class ScreenSlidePagerAdapter extends RecyclerView.Adapter<ScreenSlidePagerAdapter.ViewHolder> {
 
@@ -28,8 +27,8 @@ public class ScreenSlidePagerAdapter extends RecyclerView.Adapter<ScreenSlidePag
     private ImageButton executeButton;
     private CountManager countManager;
 
-    public ScreenSlidePagerAdapter(Context context, int[] layouts, 
-            SavonManager savonManager, ButtonSavonManager buttonSavonManager) {
+    public ScreenSlidePagerAdapter(Context context, int[] layouts,
+                                   SavonManager savonManager, ButtonSavonManager buttonSavonManager) {
         this.context = context;
         this.layouts = layouts;
         this.savonManager = savonManager;
@@ -58,13 +57,13 @@ public class ScreenSlidePagerAdapter extends RecyclerView.Adapter<ScreenSlidePag
 
             // ResetMemoryの初期化と設定
             ResetMemory resetMemory = new ResetMemory(
-                context, 
-                savonManager, 
-                buttonSavonManager, 
-                countManager,
-                executeButton,
-                resetButton,
-                startLayout
+                    context,
+                    savonManager,
+                    buttonSavonManager,
+                    countManager,
+                    executeButton,
+                    resetButton,
+                    startLayout
             );
             resetMemory.setupResetButton();
 

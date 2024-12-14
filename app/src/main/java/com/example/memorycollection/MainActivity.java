@@ -41,12 +41,12 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onPageScrollStateChanged(int state) {
                 super.onPageScrollStateChanged(state);
-                
+
                 ViewPager2 viewPager = findViewById(R.id.viewPager);
                 RecyclerView recyclerView = (RecyclerView) viewPager.getChildAt(0);
-                
+
                 // スクロール状態に応じて矢印の表示/非表示を切り替え
-                int visibility = (state == ViewPager2.SCROLL_STATE_IDLE) ? 
+                int visibility = (state == ViewPager2.SCROLL_STATE_IDLE) ?
                         View.VISIBLE : View.INVISIBLE;
 
                 // screen1のarrowを制御
@@ -73,7 +73,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 super.onPageScrolled(position, positionOffset, positionOffsetPixels);
-                
+
                 // スクロール中は全てのarrowを非表示
                 if (positionOffset > 0) {
                     ViewPager2 viewPager = findViewById(R.id.viewPager);
@@ -107,12 +107,12 @@ public class MainActivity extends BaseActivity {
 
                 // 現在のページのViewを取得
                 View currentView = ((ViewPager2)findViewById(R.id.viewPager))
-                    .getChildAt(0);
+                        .getChildAt(0);
 
                 if (position == 0) { // screen1_savonに移動した場合
                     // 通常のシャボン玉生成を開始（savon_s, savon_m, savon_l）
                     savonManager.startGeneratingSavon(findViewById(R.id.startLayout));
-                    
+
                     // arrow_rightのアニメーションをリセット
                     ImageView arrowRight = currentView.findViewById(R.id.arrow_right);
                     if (arrowRight != null) {
@@ -124,7 +124,7 @@ public class MainActivity extends BaseActivity {
                     // 両方のシャボン玉生成を停止
                     savonManager.stopGeneratingSavon(findViewById(R.id.startLayout));
                     buttonSavonManager.stopGeneratingSavon(findViewById(R.id.startLayout));
-                    
+
                     // arrow_leftのアニメーションをリセット
                     ImageView arrowLeft = currentView.findViewById(R.id.arrow_left);
                     if (arrowLeft != null) {
@@ -133,7 +133,7 @@ public class MainActivity extends BaseActivity {
                         arrowLeft.startAnimation(blinkAnimation);
                     }
                 }
-                
+
             }
         });
 

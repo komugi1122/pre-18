@@ -5,7 +5,7 @@
     android:id="@+id/startLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/main_background2"
+    android:background="@drawable/right_background0"
     android:orientation="vertical"
     android:gravity="center">
 
@@ -24,5 +24,6 @@
         android:layout_marginStart="@dimen/arrow_margin"
         android:src="@drawable/arrow_left"
         android:contentDescription="@string/savon" />
+
 
 </FrameLayout>
