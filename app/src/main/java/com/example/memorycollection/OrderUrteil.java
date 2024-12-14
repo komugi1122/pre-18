@@ -29,6 +29,7 @@ public class OrderUrteil implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         ArrayList<UriPosition> uriList = new ArrayList<>();
+        ArrayList<Uri> currentUriList = new ArrayList<>(); // 現在の順序のUriリストを追加
 
         // 現在の画像位置を取得
         for (int i = 0; i < rootLayout.getChildCount(); i++) {
@@ -42,45 +43,38 @@ public class OrderUrteil implements View.OnClickListener {
             }
         }
 
-        // Y座標でソート（下から上の順）
+        // Y座標でソート
         Collections.sort(uriList, new Comparator<UriPosition>() {
             @Override
             public int compare(UriPosition o1, UriPosition o2) {
-                // Y座標が大きい（画面下）ものが先頭（インデックス0）になるようにソート
-                if (o1.y > o2.y) {
-                    return -1;
-                } else if (o1.y < o2.y) {
-                    return 1;
-                }
+                if (o1.y > o2.y) return -1;
+                else if (o1.y < o2.y) return 1;
                 return 0;
             }
         });
 
-        // デバッグ用：ソート結果の確認
-        Log.d(TAG, "ソート後の画像位置（下から上の順）:");
-        for (int i = 0; i < uriList.size(); i++) {
-            Log.d(TAG, String.format(
-                    "インデックス %d: Y座標 = %.1f, Uri = %s",
-                    i,
-                    uriList.get(i).y,
-                    uriList.get(i).uri.toString()
-            ));
+        // UriPositionリストからUriリストを作成
+        for (UriPosition uriPosition : uriList) {
+            currentUriList.add(uriPosition.uri);
         }
 
-        // 順番を比較して異なる画像を削除
+        // OrderSuccessを使用して比較
+        OrderSuccess orderSuccess = new OrderSuccess(context);
+        orderSuccess.compareUriLists(selectedImages, currentUriList);
+
         for (int i = 0; i < Math.min(selectedImages.size(), uriList.size()); i++) {
             Uri originalUri = selectedImages.get(i);
             Uri currentUri = uriList.get(i).uri;
 
             if (!originalUri.equals(currentUri)) {
-                // 異なるUriの画像を見つけて削除
+                // 不一致の画像を探して震えるアニメーションを適用
                 for (int j = 0; j < rootLayout.getChildCount(); j++) {
                     View child = rootLayout.getChildAt(j);
                     if (child instanceof ImageView && child.getId() != R.id.remove_button) {
                         Uri childUri = (Uri) ((ImageView) child).getTag();
                         if (childUri.equals(currentUri)) {
-                            rootLayout.removeView(child);
-                            Log.d(TAG, "画像を削除: " + currentUri.toString());
+                            // 震えるアニメーションを適用
+                            OrderFail.playFailAnimation(child);
                             break;
                         }
                     }
