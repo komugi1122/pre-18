@@ -6,7 +6,6 @@ import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -60,60 +59,11 @@ public class PageAdapter extends RecyclerView.Adapter<PageAdapter.PageViewHolder
                 .onlyScaleDown()
                 .centerInside()
                 .into(frameImageView);
-        //frameImageView.setImageResource(frameResId);
 
         // カテゴリ名を設定
         String categoryName = getCategoryName(pageData.getCategory());
         holder.categoryTextView.setText(categoryName);
     }
-
-    /**
-     * 写真に額縁を追加
-     * @param photoImageView 写真を表示する ImageView
-     * @param frameResId 額縁のリソース ID
-     */
-    private void addFrameToPhoto(ImageView photoImageView, int frameResId) {
-        // 親ビューを取得
-        ViewGroup parent = (ViewGroup) photoImageView.getParent();
-
-        // すでに額縁がある場合は削除
-        for (int i = 0; i < parent.getChildCount(); i++) {
-            View child = parent.getChildAt(i);
-            if (child.getTag() != null && "frame".equals(child.getTag())) {
-                parent.removeView(child);
-                break;
-            }
-        }
-
-        // 新しい額縁を作成
-        ImageView frameImageView = new ImageView(parent.getContext());
-        frameImageView.setImageResource(frameResId);
-        frameImageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE); // 画像を中央に配置
-        frameImageView.setTag("frame"); // 識別用タグを設定
-
-        // 写真のサイズを取得
-        int photoWidth = photoImageView.getWidth();
-        int photoHeight = photoImageView.getHeight();
-
-        // 額縁のサイズを写真より少し大きく設定（ここで調整）
-        int frameWidth = (int) (photoWidth * 1.1);  // 写真の幅の1.1倍
-        int frameHeight = (int) (photoHeight * 1.1); // 写真の高さの1.1倍
-
-        // LayoutParamsで額縁のサイズを指定
-        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(frameWidth, frameHeight);
-        // 額縁を中央に配置
-        params.leftMargin = (photoWidth - frameWidth) / 2;
-        params.topMargin = (photoHeight - frameHeight) / 2;
-
-        frameImageView.setLayoutParams(params);
-
-        // 額縁を写真の背後に追加
-        int photoIndex = parent.indexOfChild(photoImageView);
-        parent.addView(frameImageView, photoIndex); // 写真の前に追加
-    }
-
-
-
 
     /**
      * 写真が縦長か横長かを判定
@@ -135,8 +85,6 @@ public class PageAdapter extends RecyclerView.Adapter<PageAdapter.PageViewHolder
             return false; // デフォルトで横長と判定
         }
     }
-
-
 
     @Override
     public int getItemCount() {
