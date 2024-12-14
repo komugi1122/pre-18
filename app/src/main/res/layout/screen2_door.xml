@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/startLayout"
     android:layout_width="match_parent"
@@ -23,3 +23,13 @@
         android:text="@string/museum"/>
 
 </LinearLayout>
+    <ImageView
+        android:id="@+id/arrow_left"
+        android:layout_width="50dp"
+        android:layout_height="80dp"
+        android:layout_gravity="start|center_vertical"
+        android:layout_marginStart="@dimen/arrow_margin"
+        android:src="@drawable/arrow_left"
+        android:contentDescription="@string/savon" />
+
+</FrameLayout>

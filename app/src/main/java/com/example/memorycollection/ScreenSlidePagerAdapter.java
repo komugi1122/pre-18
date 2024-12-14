@@ -5,24 +5,36 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import android.widget.Button;
+
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.memorycollection.savon.ButtonSavonManager;
 import com.example.memorycollection.savon.SavonManager;
+import com.example.memorycollection.memory.MemoryManager;
+import com.example.memorycollection.memory.CountManager;
+import com.example.memorycollection.memory.ResetMemory;
 
 public class ScreenSlidePagerAdapter extends RecyclerView.Adapter<ScreenSlidePagerAdapter.ViewHolder> {
 
     private final int[] layouts;
     private final Context context;
     private final SavonManager savonManager;
-    private final com.example.memorycollection.savon.ButtonSavonManager buttonSavonManager;
+    private final ButtonSavonManager buttonSavonManager;
     private ImageButton executeButton;
+    private CountManager countManager;
 
-    public ScreenSlidePagerAdapter(Context context, int[] layouts, com.example.memorycollection.savon.SavonManager savonManager, com.example.memorycollection.savon.ButtonSavonManager buttonSavonManager) {
+    public ScreenSlidePagerAdapter(Context context, int[] layouts, 
+            SavonManager savonManager, ButtonSavonManager buttonSavonManager) {
         this.context = context;
         this.layouts = layouts;
         this.savonManager = savonManager;
@@ -41,20 +53,55 @@ public class ScreenSlidePagerAdapter extends RecyclerView.Adapter<ScreenSlidePag
         if (position == 0) { // screen1_savon.xmlの場合
             executeButton = holder.itemView.findViewById(R.id.executeButton);
             FrameLayout startLayout = holder.itemView.findViewById(R.id.startLayout);
+            ImageButton resetButton = holder.itemView.findViewById(R.id.resetButton);
+
+            resetButton.setVisibility(View.INVISIBLE);
+
+            // CountManagerの初期化と設定
+            countManager = new CountManager(context);
+            countManager.setupCountView(startLayout);
+
+            // ResetMemoryの初期化と設定
+            ResetMemory resetMemory = new ResetMemory(
+                context, 
+                savonManager, 
+                buttonSavonManager, 
+                countManager,
+                executeButton,
+                resetButton,
+                startLayout
+            );
+            resetMemory.setupResetButton();
+
+            // 矢印のアニメーション設定
+            ImageView arrowRight = holder.itemView.findViewById(R.id.arrow_right);
+            Animation blinkAnimation = AnimationUtils.loadAnimation(context, R.anim.fade_blink);
+            arrowRight.startAnimation(blinkAnimation);
 
             // 実行ボタンのクリックリスナー
             executeButton.setOnClickListener(v -> {
+                countManager.showCount();
+                savonManager.startGeneratingSavon(startLayout);
+                buttonSavonManager.startGeneratingSavon(startLayout);
+                executeButton.setVisibility(View.GONE);
+                resetButton.setVisibility(View.VISIBLE);
+            });
 
-                    savonManager.startGeneratingSavon(startLayout);
-                    buttonSavonManager.startGeneratingSavon(startLayout);
-                    executeButton.setVisibility(View.GONE);
+            // CountManagerをMemoryManagerに渡す
+            if (buttonSavonManager != null) {
+                buttonSavonManager.getMemoryManager().setCountManager(countManager);
+            }
 
             });
-        }else if (position == 1) {
+        } else if (position == 1) { // screen2_door.xmlの場合
+            ImageView arrowLeft = holder.itemView.findViewById(R.id.arrow_left);
+            Animation blinkAnimation = AnimationUtils.loadAnimation(context, R.anim.fade_blink);
+            arrowLeft.startAnimation(blinkAnimation);
+            
             Button museumButton = holder.itemView.findViewById(R.id.museumButton);
             museumButton.setOnClickListener(v -> {
-                Intent intent = new Intent(context, MuseumActivity.class);
-                context.startActivity(intent); // 美術館画面に遷移
+            Intent intent = new Intent(context, MuseumActivity.class);
+            context.startActivity(intent); // 美術館画面に遷移
             });
         }
     }
