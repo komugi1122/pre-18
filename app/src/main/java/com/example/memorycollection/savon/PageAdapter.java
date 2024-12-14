@@ -52,8 +52,15 @@ public class PageAdapter extends RecyclerView.Adapter<PageAdapter.PageViewHolder
                 ? R.drawable.frame_9_16
                 : R.drawable.frame_16_9;
 
-        // 動的に額縁を追加
-        addFrameToPhoto(holder.photoImageView, frameResId);
+
+        ImageView frameImageView = holder.itemView.findViewById(R.id.frame);
+        Picasso.get()
+                .load(frameResId)
+                .resize(800, 800) // リサイズ
+                .onlyScaleDown()
+                .centerInside()
+                .into(frameImageView);
+        //frameImageView.setImageResource(frameResId);
 
         // カテゴリ名を設定
         String categoryName = getCategoryName(pageData.getCategory());

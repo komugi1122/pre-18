@@ -5,12 +5,9 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import android.widget.Button;
-
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -18,11 +15,10 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.memorycollection.savon.ButtonSavonManager;
-import com.example.memorycollection.savon.SavonManager;
-import com.example.memorycollection.memory.MemoryManager;
 import com.example.memorycollection.memory.CountManager;
 import com.example.memorycollection.memory.ResetMemory;
+import com.example.memorycollection.savon.ButtonSavonManager;
+import com.example.memorycollection.savon.SavonManager;
 
 public class ScreenSlidePagerAdapter extends RecyclerView.Adapter<ScreenSlidePagerAdapter.ViewHolder> {
 
@@ -91,8 +87,6 @@ public class ScreenSlidePagerAdapter extends RecyclerView.Adapter<ScreenSlidePag
             if (buttonSavonManager != null) {
                 buttonSavonManager.getMemoryManager().setCountManager(countManager);
             }
-
-            });
         } else if (position == 1) { // screen2_door.xmlの場合
             ImageView arrowLeft = holder.itemView.findViewById(R.id.arrow_left);
             Animation blinkAnimation = AnimationUtils.loadAnimation(context, R.anim.fade_blink);
@@ -104,7 +98,7 @@ public class ScreenSlidePagerAdapter extends RecyclerView.Adapter<ScreenSlidePag
             context.startActivity(intent); // 美術館画面に遷移
             });
         }
-    }
+}
 
     @Override
     public int getItemCount() {
