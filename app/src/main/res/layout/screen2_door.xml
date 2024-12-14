@@ -22,7 +22,6 @@
         android:layout_height="wrap_content"
         android:text="@string/museum"/>
 
-</LinearLayout>
     <ImageView
         android:id="@+id/arrow_left"
         android:layout_width="50dp"
