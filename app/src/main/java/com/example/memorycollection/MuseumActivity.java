@@ -1,8 +1,11 @@
 package com.example.memorycollection;
 
+import android.content.ContentUris;
 import android.content.DialogInterface;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.Toast;
@@ -21,6 +24,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
 public class MuseumActivity extends AppCompatActivity {
 
@@ -28,6 +32,7 @@ public class MuseumActivity extends AppCompatActivity {
     private PageAdapter pageAdapter;
     private ViewPager2 viewPager;
     private DataManager dataManager; // データ管理用
+    private Random random = new Random();// Randomインスタンスを作成
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,23 +53,6 @@ public class MuseumActivity extends AppCompatActivity {
         pageAdapter = new PageAdapter(pageDataList, this);
         viewPager.setAdapter(pageAdapter);
 
-        /*
-        // テスト用: 初期写真を追加
-        addPhotoToMuseum(
-                Uri.parse("android.resource://" + getPackageName() + "/" + R.drawable.photo_1),
-                2
-        );
-        addPhotoToMuseum(
-                Uri.parse("android.resource://" + getPackageName() + "/" + R.drawable.photo_2),
-                1
-        );
-        addPhotoToMuseum(
-                Uri.parse("android.resource://" + getPackageName() + "/" + R.drawable.photo_3),
-                8
-        );
-        */
-
-
         // 戻るボタンの設定
         Button backButton = findViewById(R.id.backButton);
         backButton.setOnClickListener(v -> finish());
@@ -82,6 +70,10 @@ public class MuseumActivity extends AppCompatActivity {
         // onCreateメソッドに消去ボタンの設定を追加
         Button deleteButton = findViewById(R.id.deleteButton); // deleteButtonはXMLで定義してください
         deleteButton.setOnClickListener(v -> showDeleteConfirmationDialog());
+
+        // ランダム写真追加ボタン設定
+        Button randomButton = findViewById(R.id.randomButton);
+        randomButton.setOnClickListener(v -> addRandomPhotoToMuseum());
     }
 
     /**
@@ -251,4 +243,45 @@ public class MuseumActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * ギャラリーからランダムに画像を取得して美術館に追加
+     */
+    public void addRandomPhotoToMuseum() {
+        Uri randomImageUri = getRandomImageFromGallery();
+        if (randomImageUri != null) {
+            // ランダムに取得した画像を美術館に追加（カテゴリーは未設定）
+            addPhotoToMuseum(randomImageUri, -1);
+        } else {
+            Toast.makeText(this, "ランダムに画像を取得できませんでした", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * ギャラリーからランダムに画像のUriを取得
+     */
+    public Uri getRandomImageFromGallery() {
+        Uri collection = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+        String[] projection = {MediaStore.Images.Media._ID};
+
+        try (Cursor cursor = getContentResolver().query(
+                collection,
+                projection,
+                null,
+                null,
+                null)) {
+
+            if (cursor != null && cursor.getCount() > 0) {
+                int randomPosition = random.nextInt(cursor.getCount());
+                cursor.moveToPosition(randomPosition);
+
+                int idColumnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID);
+                long id = cursor.getLong(idColumnIndex);
+
+                return ContentUris.withAppendedId(collection, id);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

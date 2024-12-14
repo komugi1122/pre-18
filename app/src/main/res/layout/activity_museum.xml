@@ -87,5 +87,17 @@
         android:layout_marginBottom="16dp"
         android:onClick="onDeleteButtonClick" />
 
+    <!-- ランダムに選択ボタン -->
+    <Button
+        android:id="@+id/randomButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ランダム"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:onClick="onRandomButtonClick" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
