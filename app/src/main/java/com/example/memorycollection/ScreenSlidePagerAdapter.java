@@ -97,6 +97,7 @@ public class ScreenSlidePagerAdapter extends RecyclerView.Adapter<ScreenSlidePag
             Intent intent = new Intent(context, MuseumActivity.class);
             context.startActivity(intent); // 美術館画面に遷移
             });
+
         }
 }
 
